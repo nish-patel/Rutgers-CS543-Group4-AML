@@ -12,14 +12,16 @@ Version:
 import pandas as pd
 import os
 import time
+import numpy as np
 
 t1 = time.time()
 
-# Specify the path to your CSV file
-csv_file_path = '/common/users/shared/cs543_group4/clean_data/clean_data.csv'
+#clean data file path
+# csv_file_path = '/common/users/shared/cs543_group4/clean_data/clean_data.csv'
+csv_file_path = '/Users/npatel/Downloads/clean_data.csv'
 
-# Load CSV data into a Pandas DataFrame
-df = pd.read_csv(csv_file_path)
+#load csv (add dtypes as category to save memory)
+df = pd.read_csv(csv_file_path, dtype={'bank_from':'category','bank_to':'category','currency_to':'category','currency_from':'category','payment_format':'category','is_laundering':'category','month':'category','year':'category','day':'category','hour':'category','minute':'category','unique_id_from':'category','unique_id_to':'category', 'amount_usd':np.float64})
 
 t2 = time.time()
 print('df read, time = %d seconds' %(t2-t1))
@@ -56,7 +58,8 @@ t4 = time.time()
 print('transactions complete, time = %d seconds' %(t4-t3))
 
 #save csv files
-output_path = '/common/home/nsp124'
+# output_path = '/common/home/nsp124'
+output_path = '/Users/npatel/Downloads/'
 
 account_df.to_csv(os.path.join(output_path, 'accounts.csv'), sep = ',', index = False, header = False)
 t5 = time.time()

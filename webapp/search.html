@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Dataset</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include Bootstrap DateTimePicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Search Dataset</h2>
+        
+        <div class="form-group">
+            <label for="accountID">Account ID:</label>
+            <input type="text" class="form-control" id="accountID" placeholder="Enter account ID(s)" onkeydown="handleAccountIDInput(event)">
+            <div id="accountIDBadges"></div>
+        </div>
+
+        <form id="searchForm" onsubmit="return ">
+            <div class="form-group">
+                <label for="fromDate">Start Date:</label>
+                <!-- Add the 'datepicker' class to enable Bootstrap Datepicker -->
+                <input type="text" class="form-control datepicker" id="fromDate" placeholder="Select date">
+            </div>
+
+            <div class="form-group">
+                <label for="toDate">End Date:</label>
+                <!-- Add the 'datepicker' class to enable Bootstrap Datepicker -->
+                <input type="text" class="form-control datepicker" id="toDate" placeholder="Select date">
+            </div>
+
+            <div class="form-group">
+                <label for="isLaundering">Transaction Type:</label>
+                <select class="form-control" id="isLaundering">
+                    <option value="both">All Transactions</option>
+                    <option value="true">Only Laundering Transactions</option>
+                    <option value="false">Only Non-Laundering Transactions</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="minAmount">Min Transaction Amount:</label>
+                <input type="number" class="form-control" id="minAmount" placeholder="Minimum Transaction Amount:" min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="maxAmount">Max Transaction Amount:</label>
+                <input type="number" class="form-control" id="maxAmount" placeholder="Maximum Transaction Amount:" min="0">
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="if (validateForm()) performSearch()">Search</button>
+        </form>
+    </div>
+
+<!-- Include Bootstrap 4 JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+ <!-- Include Bootstrap Datepicker JS -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<!-- Include search script -->
+<script src="searchScript.js"></script>
+<!-- Include neo4j driver -->
+<script type = 'module' src="https://unpkg.com/neo4j-driver"></script>
+
+
+<script>
+    // Initialize Bootstrap Datepicker for elements with 'datepicker' class
+    $(document).ready(function(){
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            maxViewMode: 'month',
+            defaultViewDate: '2022-08-01', // Set the default date
+            startDate: '2022-08-01',  // Set the minimum date
+            endDate: '2022-11-05',  // Set the maximum date
+        });
+    });
+
+    // Handle input for Account ID and display badges
+    function handleAccountIDInput(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            var accountIDInput = document.getElementById("accountID");
+            var accountIDBadges = document.getElementById("accountIDBadges");
+
+            // Get entered account IDs and split by commas
+            var accountIDs = accountIDInput.value.split(",");
+
+            // Clear existing badges
+            accountIDBadges.innerHTML = "";
+
+            // Create badges for each account ID
+            accountIDs.forEach(function(id) {
+                if (id.trim() !== "") {
+                    var badge = document.createElement("span");
+                    badge.className = "badge badge-secondary mr-2";
+                    badge.textContent = id.trim();
+                    accountIDBadges.appendChild(badge);
+                }
+            });
+
+            // Clear input field
+            accountIDInput.value = "";
+        }
+    }
+
+    function validateForm() {
+    // Retrieve user input values
+    var accountID = document.getElementById("accountID").value;
+    var fromDate = document.getElementById("fromDate").value;
+    var toDate = document.getElementById("toDate").value;
+    var minAmount = document.getElementById('minAmount').value;
+    var maxAmount = document.getElementById('maxAmount').value;
+
+    // Retrieve badges
+    var accountIDBadges = document.getElementById("accountIDBadges");
+    var badgeCount = accountIDBadges.childElementCount;
+
+    // Validate accountID
+    if (accountID.trim() === "" & badgeCount === 0) {
+        alert("Error: Account ID is required.");
+        return false;
+    }
+
+    // Validate date range
+    if (fromDate.trim() !== "" && toDate.trim() !== "") {
+        var startDate = new Date('2022-08-01');
+        var endDate = new Date('2022-11-05');
+
+        var fromDateDate = new Date(fromDate);
+        var toDateDate = new Date(toDate);
+
+        // Check if the input is a valid date
+        if (isNaN(fromDateDate) || isNaN(toDateDate)) {
+            alert("Error: Please enter valid dates.");
+            return false;
+        }
+
+        if (fromDateDate > toDateDate) {
+            alert("Error: 'Start Date' cannot be after 'End Date'.");
+            return false;
+        }
+
+        if (fromDateDate < startDate || toDateDate > endDate) {
+            alert("Error: Search is restricted to the date range from 8/1/22 to 11/5/22.");
+            return false;
+        }
+    }
+
+    // Validate min and max transaction amount
+    if (minAmount.trim() !== "" && maxAmount.trim() !== "") {
+                var minAmountValue = parseFloat(minAmount);
+                var maxAmountValue = parseFloat(maxAmount);
+
+                if (isNaN(minAmountValue) || isNaN(maxAmountValue) || minAmountValue > maxAmountValue) {
+                    alert("Error: 'Min Transaction Amount' should not be larger than 'Max Transaction Amount'.");
+                    return false;
+                }
+            }
+
+    // If all validations pass, return true to allow the form submission
+    return true;
+}
+
+</script>
+</body>
+</html>

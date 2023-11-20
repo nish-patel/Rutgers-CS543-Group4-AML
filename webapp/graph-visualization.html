@@ -5,11 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graph Visualization</title>
+    <style type="text/css">
+        html, body {
+            font: 16pt arial;
+            height: 99%;
+            width: 99%;
+        }
 
-    <!-- Include neovis.js library -->
-    <script src="https://unpkg.com/neovis.js@2.0.2"></script>
+        #viz {
+            width: 99%;
+            height: 99%;
+            border: 1px solid lightgray;
+        }
+
+    </style>
 </head>
 <body>
+    <!-- Include neovis.js library -->
+    <script src="https://unpkg.com/neovis.js"></script>
 
     <!-- Container for the graph visualization -->
     <div id="viz"></div>
@@ -27,33 +40,35 @@
         // Decode the query if it exists
         var cypherQuery = encodedQuery ? decodeURIComponent(encodedQuery) : '';
 
+        console.log(cypherQuery)
 
-        // Create a new Neovis instance with the extracted cypherQuery
-        var config = {
-            container_id: "viz",
-            server_url: "bolt://localhost:7687",
-            server_user: "neo4j",
-            server_password: "neo4jneo4j",
+        //Create a new Neovis instance with the extracted cypherQuery
+        const config = {
+            containerId: "viz",
+            neo4j: {
+                serverUrl: "bolt://localhost:7687",
+                serverUser: "neo4j",
+                serverPassword: "cs543group4",
+            },
             labels: {
-                "root": {
-                    "caption": "accountID",
+                root: {
+                    label: "accountID",
                 },
-                "connected": {
-                    "caption": "accountID",
+                connected: {
+                    label: "accountID",
                 }
             },
             relationships: {
-                "CONNECTED_TO": {
-                    "caption": false,
+                rels: {
+                    label: "false"
                 }
             },
-            initial_cypher: cypherQuery,
+            initialCypher: cypherQuery
         };
 
-        var viz = new NeoVis.default(config);
-
-        // Render the graph
-        viz.render();
+        neoViz = new NeoVis.default(config);
+        neoViz.render();
+        
     </script>
 
 </body>

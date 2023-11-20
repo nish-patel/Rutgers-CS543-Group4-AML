@@ -122,7 +122,7 @@ function performSearch() {
     console.log('Generated Cypher Query:');
     console.log(cypherQuery);
 
-    performSearch(cypherQuery)
+    queryDB(cypherQuery)
 }
 
 function parseLocalDate(dateString) {
@@ -145,31 +145,17 @@ function parseLocalDate(dateString) {
     return new Date(year, month, day);
 }
 
-function performSearch(cypherQuery) {
+function queryDB(cypherQuery) {
     
     
-    // Create a Neo4j session
-    const neo4j = require('neo4j-driver');
-    const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', 'cs543group4'));
-    const session = driver.session();
+    // Encode the cypherQuery parameter
+    var encodedQuery = encodeURIComponent(cypherQuery);
+    console.log(encodedQuery)
 
-    // Execute the Cypher query
-    session.run(cypherQuery)
-        .then(result => {
-            // Handle the results here
-            result.records.forEach(record => {
-                // Access the data in the record, e.g., record.get('root'), record.get('connected'), record.get('rels')
-                console.log(record.get('root').properties);
-                console.log(record.get('connected').properties);
-                console.log(record.get('rels'));
-            });
-        })
-        .catch(error => {
-            console.error('Error executing Cypher query:', error);
-        })
-        .finally(() => {
-            // Close the session when done
-            session.close();
-            driver.close();
-        });
+    // Store the encoded query in localStorage
+    localStorage.setItem('encodedQuery', encodedQuery);
+
+
+    // Redirect to the new HTML page with the graph visualization
+    window.location.href = 'graph-visualization.html';
 }

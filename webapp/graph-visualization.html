@@ -8,26 +8,26 @@
     <style type="text/css">
         html, body {
             font: 16pt arial;
-            height: 99%;
-            width: 99%;
+            height: 90%;
+            width: 90%;
+        }
+        div{
+
+        margin-top: 10px;
+
         }
 
         #viz {
-            width: 99%;
-            height: 99%;
+            width: 90%;
+            height: 90%;
             border: 1px solid lightgray;
         }
 
     </style>
-</head>
-<body>
     <!-- Include neovis.js library -->
     <script src="https://unpkg.com/neovis.js"></script>
 
-    <!-- Container for the graph visualization -->
-    <div id="viz"></div>
-
-    <script>
+    <script type="text/javascript">
         // Function to extract query parameters from the URL
         function getQueryParameter(name) {
             var urlParams = new URLSearchParams(window.location.search);
@@ -36,40 +36,168 @@
 
         // Retrieve the encoded query from localStorage
         var encodedQuery = localStorage.getItem('encodedQuery');
-
+        var uniqueAccountIDs = JSON.parse(localStorage.getItem('uniqueAccountIDs'));
+        
         // Decode the query if it exists
         var cypherQuery = encodedQuery ? decodeURIComponent(encodedQuery) : '';
 
-        console.log(cypherQuery)
+        // Record the start time
+        var startTime = performance.now();
 
-        //Create a new Neovis instance with the extracted cypherQuery
-        const config = {
-            containerId: "viz",
-            neo4j: {
-                serverUrl: "bolt://localhost:7687",
-                serverUser: "neo4j",
-                serverPassword: "cs543group4",
-            },
-            labels: {
-                root: {
-                    label: "accountID",
+        var viz;
+
+        function draw() {
+            //Get Query Parameters from local storage
+            var fromDate = localStorage.getItem('fromDate');
+            var toDate = localStorage.getItem('toDate');
+            var txn_type = localStorage.getItem('txn_type');
+            var minAmount = localStorage.getItem('minAmount');
+            var maxAmount = localStorage.getItem('maxAmount');
+            
+            var queryParams = {}
+            
+            queryParams['accountIDs'] = uniqueAccountIDs
+
+            if(fromDate != ''){
+                queryParams['fromDate'] = fromDate
+            }
+
+            if(toDate != ''){
+                queryParams['toDate'] = toDate
+            }
+
+            if(txn_type != ''){
+                queryParams['transactionType'] = txn_type
+            }
+
+            if(minAmount != ''){
+                queryParams['minAmount'] = minAmount
+            }
+
+            if(maxAmount != ''){
+                queryParams['maxAmount'] = maxAmount
+            }
+
+            document.getElementById("QueryLabel").innerText = 'Query parameters: ' + JSON.stringify(queryParams)
+            //Create a new Neovis instance with the extracted cypherQuery
+            var config = {
+                containerId: "viz",
+                neo4j: {
+                    serverUrl: "bolt://localhost:7687",
+                    serverUser: "neo4j",
+                    serverPassword: "cs543group4",
                 },
-                connected: {
-                    label: "accountID",
-                }
-            },
-            relationships: {
-                rels: {
-                    label: "false"
-                }
-            },
-            initialCypher: cypherQuery
-        };
+                labels: {
+                    account: {
+                        // group: 'is_laundering',
+                        [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+                            function: {
+                                title: (node) => NeoVis.objectToTitleHtml(node, [
+                                    "accountID",
+                                    "is_laundering"
+                                ]),
+                                color: {
+                                    background: (node)=>{
+                                    if(uniqueAccountIDs.includes(node.properties.accountID)){
+                                        return 'red'}
+                                    else if(node.properties.is_laundering == '1'){
+                                        return 'orange'}
+                                    else return 'blue';
+                                    }
+                                },
+                                shape: (node)=>{
+                                    if(uniqueAccountIDs.includes(node.properties.accountID)){
+                                        return 'star'};
+                                },
+                                size: (node)=>{
+                                    if(uniqueAccountIDs.includes(node.properties.accountID)){
+                                        return 100};
+                                }
+                            }
+                        }
+                    }
+                },
+                relationships: {
+                    transaction: {
+                        // group: 'is_laundering',
+                        [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+                            function: {
+                                title: (rel) => NeoVis.objectToTitleHtml(rel, [
+                                    "amount_usd",
+                                    "currency_from",
+                                    "currency_to",
+                                    "payment_format",
+                                    "year",
+                                    'month',
+                                    'day'
+                                ]),
+                                color: (rel)=>{
+                                    if(rel.properties.is_laundering == '1'){
+                                        return 'orange'}
+                                    else return '#6495ED';
+                                    },
+                                width: (rel)=>{
+                                    if(rel.properties.is_laundering == '1'){
+                                        return 20}
+                                    // else if 
+                                    else return Math.log(rel.properties.amount_usd);
+                                }
+                            }
+                        }
+                    }
+                },
+                initialCypher: cypherQuery
+            };
 
-        neoViz = new NeoVis.default(config);
-        neoViz.render();
-        
+            viz = new NeoVis.default(config);
+            viz.render();
+            
+            viz.registerOnEvent("completed", (e) => {
+
+                // Record the end time
+                var queryendTime = performance.now();
+
+                // Calculate the time taken
+                var querytimeTaken = queryendTime - startTime;
+
+                // Display the time taken
+                document.getElementById("timeTakenLabel").innerText = "Query time taken: " + (querytimeTaken/1000).toFixed(2) + " seconds";
+                
+                // Display record count
+                document.getElementById("recordCount").innerText = "# of Edges: " + e.recordCount;
+                });
+
+            // viz._network.on("afterDrawing", (e) => {
+            //     // Record the end time
+            //     var drawendTime = performance.now();
+
+            //     // Calculate the time taken
+            //     var drawtimeTaken = drawendTime - startTime;
+
+            //     // Display the time taken
+            //     document.getElementById("timeTakenLabel2").innerText = "Time taken: " + (drawtimeTaken/1000).toFixed(2) + " seconds";
+            //     });
+
+
+            viz.registerOnEvent("clickNode", (e) => { 
+                document.getElementById("selectedNode").innerText = 'selected nodeID: ' + e.node.raw.properties['accountID'];
+                });
+
+
+            }
     </script>
+</head>
 
+<body onload="draw()">
+
+        <!-- Container for the graph visualization -->
+        <div id="viz"></div>
+    
+        <!-- Container for the time taken label -->
+        <div id="QueryLabel"></div>
+        <div id="timeTakenLabel"></div>
+        <div id="timeTakenLabel2"></div>
+        <div id="recordCount"></div>
+        <div id="selectedNode"></div>
 </body>
 </html>

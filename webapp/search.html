@@ -79,31 +79,28 @@
 
     // Handle input for Account ID and display badges
     function handleAccountIDInput(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            var accountIDInput = document.getElementById("accountID");
-            var accountIDBadges = document.getElementById("accountIDBadges");
+    if (event.key === "Enter") {
+        event.preventDefault();
+        var accountIDInput = document.getElementById("accountID");
+        var accountIDBadges = document.getElementById("accountIDBadges");
 
-            // Get entered account IDs and split by commas
-            var accountIDs = accountIDInput.value.split(",");
+        // Get entered account IDs and split by commas
+        var accountIDs = accountIDInput.value.split(",");
 
-            // Clear existing badges
-            accountIDBadges.innerHTML = "";
+        // Create badges for each account ID
+        accountIDs.forEach(function (id) {
+            if (id.trim() !== "") {
+                var badge = document.createElement("span");
+                badge.className = "badge badge-secondary mr-2";
+                badge.textContent = id.trim();
+                accountIDBadges.appendChild(badge);
+            }
+        });
 
-            // Create badges for each account ID
-            accountIDs.forEach(function(id) {
-                if (id.trim() !== "") {
-                    var badge = document.createElement("span");
-                    badge.className = "badge badge-secondary mr-2";
-                    badge.textContent = id.trim();
-                    accountIDBadges.appendChild(badge);
-                }
-            });
-
-            // Clear input field
-            accountIDInput.value = "";
-        }
+        // Clear input field
+        accountIDInput.value = "";
     }
+}
 
     function validateForm() {
     // Retrieve user input values

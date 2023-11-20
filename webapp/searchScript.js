@@ -1,4 +1,4 @@
-//efeb5a6214865c59c9d769d5b37107fcfc9a473536519f31efa2486bc471fa49,fbe351a2b24e27e8478bb02be5e5f35b3fd639b15057b9c46282f270e860b719
+//efeb5a6214865c59c9d769d5b37107fcfc9a473536519f31efa2486bc471fa49,fbe351a2b24e27e8478bb02be5e5f35b3fd639b15057b9c46282f270e860b719, launder: ca2c01c2227c6a6c37cbd18b5f29dd5ea91557c7f9bc44d38314f033f7ab9283
 function performSearch() {
     // Retrieve user input values
     var fromDate = document.getElementById('fromDate').value;
@@ -26,16 +26,15 @@ function performSearch() {
         }
     }
 
+    // Save unique account IDs in local storage
+    localStorage.setItem('uniqueAccountIDs', JSON.stringify(Array.from(uniqueAccountIDs)))
+
     // Convert accountIDs to a string representation with single quotes
     var accountIDString = Array.from(uniqueAccountIDs).map(id => "'" + id + "'").join(',');
 
     // Convert date strings to Date objects
     var fromDate = parseLocalDate(fromDate);
     var toDate = parseLocalDate(toDate);
-
-    // Print the extracted date components for demonstration purposes
-    console.log('From Date:', fromDate);
-    console.log('To Date:', toDate);
 
     // Build the Cypher query based on user input
     var cypherQuery = 'MATCH path = (root)-[rel*1..2]-(connected) WHERE root.accountID IN [' + accountIDString + '] AND root <> connected';
@@ -54,6 +53,9 @@ function performSearch() {
         var toMonth = toDate.getMonth() + 1;
         var toDay = toDate.getDate();
 
+        localStorage.setItem('fromDate', fromMonth + '/' + fromDay + '/' + fromYear)
+        localStorage.setItem('toDate', toMonth + '/' + toDay + '/' + toYear)
+
         relQuery += ' (date({year: r.year, month: r.month, day: r.day}) >= date({year: ' + fromYear+ ', month: ' + fromMonth + ', day: ' + fromDay + '}) and date({year: r.year, month: r.month, day: r.day}) <= date({year: ' + toYear + ', month: ' + toMonth + ', day: ' + toDay + '}))';
     }
     else if (fromDate){
@@ -62,6 +64,8 @@ function performSearch() {
         var fromMonth = fromDate.getMonth() + 1; // Month is zero-based, so add 1
         var fromDay = fromDate.getDate();
 
+        localStorage.setItem('fromDate', fromMonth + '/' + fromDay + '/' + fromYear)
+
         relQuery += ' date({year: r.year, month: r.month, day: r.day}) >= date({year: ' + fromYear+ ', month: ' + fromMonth + ', day: ' + fromDay + '})';
     }
     else if (toDate){
@@ -69,43 +73,69 @@ function performSearch() {
         var toMonth = toDate.getMonth() + 1;
         var toDay = toDate.getDate();
 
+        localStorage.setItem('toDate', toMonth + '/' + toDay + '/' + toYear)
+
         if(relQuery != ' AND ALL(r in rel WHERE '){
             relQuery += ' AND'
         }
 
         relQuery += ' date({year: r.year, month: r.month, day: r.day}) <= date({year: ' + toYear + ', month: ' + toMonth + ', day: ' + toDay + '})';
     }
+    else{
+        localStorage.setItem('fromDate', '')
+        localStorage.setItem('toDate', '')
+    }
     
     if (isLaundering === 'true') {
         if(relQuery != ' AND ALL(r in rel WHERE '){
             relQuery += ' AND'
         }
+
+        localStorage.setItem('txn_type', 'Only Laundering Transactions')
+        
         relQuery += ' r.is_laundering = 1';
     } else if (isLaundering === 'false') {
         if(relQuery != ' AND ALL(r in rel WHERE '){
             relQuery += ' AND'
         }
+
+        localStorage.setItem('txn_type', 'Only Non-Laundering Transactions')
+
         relQuery += ' r.is_laundering = 0';
     } else if (isLaundering === 'both') {
-        console.log('both selected so no laundering filter')
+        localStorage.setItem('txn_type', 'All Transactions')
     }
 
     if (minAmount >0 & maxAmount > 0){
         if(relQuery != ' AND ALL(r in rel WHERE '){
             relQuery += ' AND'
         }
+
+        localStorage.setItem('minAmount', minAmount)
+        localStorage.setItem('maxAmount', maxAmount)
+
         relQuery += ' r.amount_usd <= ' + maxAmount + ') and (r.amount_usd >= ' + minAmount
     }
     else if (minAmount > 0){
         if(relQuery != ' AND ALL(r in rel WHERE '){
             relQuery += ' AND'
         }
+
+        localStorage.setItem('minAmount', minAmount)
+
         relQuery += ' r.amount_usd >= ' + minAmount
     } else if (maxAmount > 0){
         if(relQuery != ' AND ALL(r in rel WHERE '){
             relQuery += ' AND'
         }
+
+        localStorage.setItem('maxAmount', maxAmount)
+
         relQuery += ' r.amount_usd <= ' + maxAmount
+    }
+    else{
+        localStorage.setItem('minAmount', '')
+        localStorage.setItem('maxAmount', '')
     }
 
 
@@ -117,12 +147,8 @@ function performSearch() {
 
     // Add return to cypher query
     cypherQuery += ' RETURN DISTINCT root, connected, relationships(path) AS rels;';
-
-    // Output the constructed Cypher query (for demonstration purposes)
-    console.log('Generated Cypher Query:');
-    console.log(cypherQuery);
-
-    queryDB(cypherQuery)
+           
+    queryDB(cypherQuery, uniqueAccountIDs)
 }
 
 function parseLocalDate(dateString) {
@@ -145,17 +171,15 @@ function parseLocalDate(dateString) {
     return new Date(year, month, day);
 }
 
-function queryDB(cypherQuery) {
+function queryDB(cypherQuery,) {
     
     
     // Encode the cypherQuery parameter
     var encodedQuery = encodeURIComponent(cypherQuery);
-    console.log(encodedQuery)
 
     // Store the encoded query in localStorage
     localStorage.setItem('encodedQuery', encodedQuery);
-
-
+    
     // Redirect to the new HTML page with the graph visualization
     window.location.href = 'graph-visualization.html';
 }

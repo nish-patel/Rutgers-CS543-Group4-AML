@@ -160,6 +160,33 @@
     return true;
 }
 
+    // Function to get URL parameters
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // Function to prepopulate accountID field
+    function prepopulateAccountID() {
+        var accountIDInput = document.getElementById("accountID");
+        var accountIDFromUrl = getUrlParameter('accountid');
+
+        if (accountIDFromUrl) {
+            // Set the value of the accountID input field
+            accountIDInput.value = accountIDFromUrl;
+
+            // Trigger the keydown event to handle badges
+            handleAccountIDInput({ key: "Enter" });
+        }
+    }
+
+    // Call the prepopulateAccountID function when the document is ready
+    $(document).ready(function () {
+        prepopulateAccountID();
+    });
+
 </script>
 </body>
 </html>

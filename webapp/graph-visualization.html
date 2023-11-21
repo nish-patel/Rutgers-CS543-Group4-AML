@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graph Visualization</title>
+    <title>AML Search Visualization</title>
     <style type="text/css">
         html, body {
             font: 16pt arial;
             height: 90%;
-            width: 90%;
+            width: 99%;
         }
         div{
 
@@ -17,12 +17,29 @@
 
         }
 
+        #container {
+            flex: 1;
+            display: flex;
+            height: 100%;
+        }
+
         #viz {
-            width: 90%;
-            height: 90%;
+            width: 80%; /* Adjusted width for visualization */
+            height: 100%;
             border: 1px solid lightgray;
         }
 
+        #legend {
+            width: 20%; /* Adjusted width for legend */
+            background-color: white;
+            padding: 10px;
+            /* border: 1px solid #ccc; */
+        }
+
+        #legend h2 {
+            font-weight: bold;
+            margin-bottom: 10px; /* Adjusted margin for spacing */
+        }
     </style>
     <!-- Include neovis.js library -->
     <script src="https://unpkg.com/neovis.js"></script>
@@ -36,7 +53,7 @@
 
         // Retrieve the encoded query from localStorage
         var encodedQuery = localStorage.getItem('encodedQuery');
-        var uniqueAccountIDs = JSON.parse(localStorage.getItem('uniqueAccountIDs'));
+        var uniqueAccountIDs = JSON.parse(localStorage.getItem('uniqueAccountIDs')).filter(item => item);
         
         // Decode the query if it exists
         var cypherQuery = encodedQuery ? decodeURIComponent(encodedQuery) : '';
@@ -153,36 +170,28 @@
 
             viz = new NeoVis.default(config);
             viz.render();
-            
+                        
             viz.registerOnEvent("completed", (e) => {
-
                 // Record the end time
                 var queryendTime = performance.now();
 
                 // Calculate the time taken
                 var querytimeTaken = queryendTime - startTime;
 
+                
+                // Display records per second -- (records scanned + returned) / seconds taken
+                var recordsPerSecond = ((168806857 + e.recordCount*viz.nodes.length) / (querytimeTaken/1000))
+
                 // Display the time taken
-                document.getElementById("timeTakenLabel").innerText = "Query time taken: " + (querytimeTaken/1000).toFixed(2) + " seconds";
+                document.getElementById("timeTakenLabel").innerText = "Query time taken: " + (querytimeTaken/1000).toFixed(2) + " seconds;    Records processed per second: " + recordsPerSecond.toFixed(0);
                 
                 // Display record count
-                document.getElementById("recordCount").innerText = "# of Edges: " + e.recordCount;
+                document.getElementById("recordCount").innerText = "# of Edges: " + e.recordCount + ';    # of Nodes: ' + viz.nodes.length;
+                
                 });
 
-            // viz._network.on("afterDrawing", (e) => {
-            //     // Record the end time
-            //     var drawendTime = performance.now();
-
-            //     // Calculate the time taken
-            //     var drawtimeTaken = drawendTime - startTime;
-
-            //     // Display the time taken
-            //     document.getElementById("timeTakenLabel2").innerText = "Time taken: " + (drawtimeTaken/1000).toFixed(2) + " seconds";
-            //     });
-
-
             viz.registerOnEvent("clickNode", (e) => { 
-                document.getElementById("selectedNode").innerText = 'selected nodeID: ' + e.node.raw.properties['accountID'];
+                document.getElementById("selectedNode").innerText = 'selected accountID: ' + e.node.raw.properties['accountID'];
                 });
 
 
@@ -192,8 +201,19 @@
 
 <body onload="draw()">
 
-        <!-- Container for the graph visualization -->
-        <div id="viz"></div>
+        <!-- Containers for the graph visualization and legend -->
+        <div id="container">
+            <div id="viz"></div>
+            <!-- Legend -->
+            <div id="legend">
+                <h2>Legend</h2>
+                <p><span style="color: red;">&#9733;</span> Account(s) that were queried</p>
+                <p><span style="color: blue;">&#9679;</span> Non-laundering account</p>
+                <p><span style="color: orange;">&#9679;</span> Laundering account</p>
+                <p><span style="color: blue;"><strong>&mdash;</strong></span> Non-laundering transaction</p>
+                <p><span style="color: orange;"><strong>&mdash;</strong></span> Laundering transaction</p>
+            </div>
+        </div>
     
         <!-- Container for the time taken label -->
         <div id="QueryLabel"></div>

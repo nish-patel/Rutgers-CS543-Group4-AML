@@ -1,0 +1,24 @@
+------ GAT BCE Logits sigmoid --------
+
+Epoch: 0, Loss: 1.0168, Validation Loss: 1.2850, Accuracy: 0.5038, Time: 401 seconds
+Epoch: 1, Loss: 1.0220, Validation Loss: 1.2800, Accuracy: 0.5157, Time: 391 seconds
+Epoch: 2, Loss: 1.0395, Validation Loss: 1.2775, Accuracy: 0.5230, Time: 351 seconds
+Epoch: 3, Loss: 1.0170, Validation Loss: 1.2788, Accuracy: 0.5175, Time: 386 seconds
+Epoch: 4, Loss: 1.0177, Validation Loss: 1.2792, Accuracy: 0.5175, Time: 388 seconds
+Epoch: 5, Loss: 1.0293, Validation Loss: 1.2778, Accuracy: 0.5212, Time: 379 seconds
+Epoch: 6, Loss: 1.0132, Validation Loss: 1.2778, Accuracy: 0.5195, Time: 354 seconds
+Epoch: 7, Loss: 1.0202, Validation Loss: 1.2798, Accuracy: 0.5164, Time: 382 seconds
+Epoch: 8, Loss: 1.0244, Validation Loss: 1.2785, Accuracy: 0.5194, Time: 372 seconds
+Epoch: 9, Loss: 1.0181, Validation Loss: 1.2776, Accuracy: 0.5219, Time: 377 seconds
+Epoch: 10, Loss: 1.0024, Validation Loss: 1.2783, Accuracy: 0.5191, Time: 386 seconds
+Epoch: 11, Loss: 1.0229, Validation Loss: 1.2780, Accuracy: 0.5202, Time: 371 seconds
+Epoch: 12, Loss: 0.9982, Validation Loss: 1.2812, Accuracy: 0.5142, Time: 378 seconds
+Epoch: 13, Loss: 1.0104, Validation Loss: 1.2779, Accuracy: 0.5204, Time: 377 seconds
+Epoch: 14, Loss: 1.0117, Validation Loss: 1.2777, Accuracy: 0.5204, Time: 368 seconds
+training complete, time = 5819 seconds
+accuracy: 0.5203820935856429
+f1_micro: 0.763144673891353
+f1_macro: 0.5196470806357494
+roc_auc: 0.5203820935856429
+recall: 0.14441299671685723
+precision: 0.2307462713566021

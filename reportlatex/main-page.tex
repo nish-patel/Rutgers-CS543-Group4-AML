@@ -1,0 +1,144 @@
+\documentclass[10pt,conference]{IEEEtran}
+
+\ifCLASSINFOpdf
+	\usepackage[pdftex]{graphicx}
+	%\graphicspath{{./figs/}}
+	\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+	\usepackage[dvips]{graphicx}
+	%\graphicspath{{./figs/}}
+	\DeclareGraphicsExtensions{.eps}
+\fi
+
+\usepackage[cmex10]{amsmath}
+\usepackage[tight,footnotesize]{subfigure}
+\usepackage{xcolor}
+\usepackage[lined,ruled]{algorithm2e}
+
+\usepackage[latin1]{inputenc}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+
+\usepackage[]{algorithm2e}
+\usepackage{amsmath}
+\raggedbottom
+
+\newtheorem{property}{Property}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{question}{Question}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+
+\makeatletter
+\pgfdeclareshape{datastore}{
+\inheritsavedanchors[from=rectangle]
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{base}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{north east}
+\inheritanchor[from=rectangle]{east}
+\inheritanchor[from=rectangle]{south east}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{south west}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{north west}
+\backgroundpath{
+    %  store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+\pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@ya}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}
+\pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yb}}
+ }
+}
+\makeatother
+
+\newcommand{\riham}[1]{{\color{red}{#1}}}
+\newcommand{\james}[1]{{\color{blue}{#1}}}
+
+
+\begin{document}
+
+\title{Anti-Money Laundering Visualization}
+\author{
+\IEEEauthorblockN{Debopriyo Ghosh}
+\IEEEauthorblockA{Rutgers University\\}
+ \email{dg1114@scarletmail.rutgers.edu}
+\and
+\IEEEauthorblockN{Nish Patel}
+\IEEEauthorblockA{Rutgers University\\}
+ \email{nsp124@scarletmail.rutgers.edu}
+\and
+\IEEEauthorblockN{Jahnavi Manchala}
+\IEEEauthorblockA{Rutgers University\\}
+ \email{jm2658@scarletmail.rutgers.edu}
+}
+\maketitle
+\begin{abstract}
+\textnormal{With massive graph networks, the analyst can not visualize or analyze the graph using a traditional visualization. Despite this, analysts will need to perform an ad-hoc review of accounts to identify potential accounts of interest. Visualizing the data with a graph city solves this problem by allowing analysts to see the entire graph and perform analysis one building at a time. We used the graph city architecture introduced by James Abello, H. Zhang, Daniel Nakhimovich, Chengguizi Han, and Mridul Aanjaneya.\cite{Abello2022GigaGC}}
+\end{abstract}
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} #1
+}
+\keywords{Money Laundering Detection, Graph Cities, Data Visualization, Synthetic Laundering Transactions, Neo4j, Neovis, PySpark, Monitoring Transactions
+}
+%\onecolumn \maketitle \normalsize \vfill
+
+\IEEEpeerreviewmaketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}\label{sec:1. Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\textnormal{
+\setlength{\parindent}{2em}Money laundering detection is a critical issue in the financial sector, where the stakes are exceptionally high due to the potential for large-scale financial crimes. Real financial transaction data, which is pivotal in identifying and combating such illicit activities, is highly confidential and difficult to obtain for privacy reasons. This confidentiality is necessary to protect the personal and financial information of individuals and institutions but simultaneously poses a significant challenge for regulatory bodies and financial institutions striving to detect and prevent money laundering. As a result, developing effective detection systems often relies on sophisticated techniques that can work with limited or synthesized data, while still accurately identifying suspicious activities without violating privacy norms and regulations. IBM has developed a simulation model to generate synthetic transactions. The simulation includes simulated money laundering and these transactions are labeled in the dataset.
+}
+
+\textnormal{
+ Our project aims to provide analysts with a visualization tool to perform an ad-hoc analysis of financial transaction data to identify possible accounts of interest. Once the accounts of interest are found, we aim to help the analyst review financial transactions conducted by the accounts and their related accounts.
+}
+
+
+\section{Dataset Description }\label{sec:1 Dataset Description. }
+%%%%%%%
+\input{dataset}
+\vspace{\baselineskip}
+
+\section{Questions to Answer}\label{sec: Questions to Answer.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Questions.tex}
+\vspace{\baselineskip} 
+
+\section{Methodology}\label{sec: Methodology}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Methodology.tex}
+\vspace{\baselineskip} 
+
+\section{Implementation }\label{sec: Implementation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{Implementation.tex}
+
+\section{Architecture }\label{sec: Architecture.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{architecture.tex}
+
+\section{Project Timeline}\label{sec:5. Project Timeline}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{timeline.tex}
+
+\section{Future work.}\label{sec: Future work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{FutureWork.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{paper.bib}
+
+\end{document}
+
+

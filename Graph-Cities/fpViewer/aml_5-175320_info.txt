@@ -1,0 +1,1 @@
+|dataset:aml_5-175320|vertices:7962|edges:31630|connected_fixpoints:1|peel_values:1|buckets:1|

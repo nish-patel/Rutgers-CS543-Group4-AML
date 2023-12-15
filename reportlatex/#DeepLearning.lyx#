@@ -1,0 +1,287 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Itemize
+The project was extended for the Deep Learning aspect individually by Nish
+ Patel.
+ In this second phase of the project, the fundamental question asked was
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Can deep learning be utilized to predict the accounts that are involved
+ in a money laundering transaction?
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+With the findings in Phase 1 being that graphs are the most suitable data
+ structure to model this problem, a literature review was conducted on graph
+ convolutional neural networks.
+ With the recent advances in graph convolutional neural networks, this was
+ the most prevalant method of leveraging deep learning in the literature
+ review.
+ Essentially the problem boils down to a very complex binary classification
+ problem with the goal being that target end users (fraud analysts) can
+ be alerted to potential fraudulent accounts for manual investigation by
+ the neural network.
+\end_layout
+
+\begin_layout Itemize
+Once graph convolutional neural networks were decided as the methodology,
+ a python script was created to generate the necessary input files to create
+ a pytorch graph object using the torch_geometric extension.
+ This extension allows the graph to be directly input as the training/test
+ data into graph convolutional neural networks.
+\end_layout
+
+\begin_layout Itemize
+When first training the model, results were very poor (balanced_accuracy
+ ~0.5).
+ Given there were only 3 node features (account_id, bank which are included
+ in the dataset and is_laundering which was created in phase 1), a feature
+ engineering task was conducted to create more node features to help the
+ model identify patterns for the predictions.
+\end_layout
+
+\begin_layout Itemize
+8 features were created:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+transactions_from, transactions_to: the total number of payments made and
+ received by the account
+\end_layout
+
+\begin_layout Itemize
+total_usd_from, total_usd_to: the total amount of money (in USD) sent and
+ received by the account
+\end_layout
+
+\begin_layout Itemize
+avg_usd_from, avg_usd_to: the average transaction amount (in USD) sent and
+ received by the account
+\end_layout
+
+\begin_layout Itemize
+total_currencies_from, total_currencies_to: count of the number of unique
+ currencies used in transactions by the account
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+These features were created to give the model information on the account's
+ behaviors to try to identify outlier patterns.
+ For example, if an account has a low avg_usd_from/to and there is suddenly
+ a large transaction, that could be something that could be an identifying
+ factor for the model to predict if the account is involved in laundering
+ transactions or not.
+\end_layout
+
+\begin_layout Itemize
+The additional features did not help model performance, however, as the
+ balanced_accuracy stayed steady at approximately 0.5
+\end_layout
+
+\begin_layout Itemize
+The next approach was to introduce a Graph Attention Network (GAT) to capture
+ the differing weightage that should be applied to neighboring nodes.
+ In a GCN, the weights assigned to neighboring nodes is the same for all
+ neighbors.
+ By adding attention, the weights for neighboring nodes can be individually
+ assigned and the network can selectively attend to the neighboring nodes
+ that are more important.
+ This is particularly important because of the class imbalance that is present
+ in the data (only ~0.1% of the transactions and ~2% of accounts are flagged
+ as money laundering).
+ Attention provides the ability to give weightage to neighboring nodes that
+ are involved in money laundering activity even if they are a much smaller
+ portion of the total nodes
+\end_layout
+
+\begin_layout Itemize
+The results with GAT were still staying steady with balanced_accuracy at
+ approximately 0.5.
+ 
+\end_layout
+
+\begin_layout Itemize
+The next item to tweak was the loss function.
+ pytorch offers an option to provide weighting to account for the class
+ imbalance in the loss function if you use BCEWithLogitsLoss so the models
+ were updated to use this loss function.
+ The weighting was calculated based on the counts.
+ Weighting for laundering accounts was given as the total number of accounts/num
+ber of laundering accounts to account for class imbalance.
+\end_layout
+
+\begin_layout Itemize
+This had a marginal improvement in the GAT model with balanced_accuracy
+ ticking up to approximately 0.52.
+\end_layout
+
+\begin_layout Itemize
+With the given time constraints, other models were not able to be tried
+ but the GAT with BCEWithLogitsLoss was used as the base model.
+ Hyperparameters were tuned for this model:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Learning rate – a final value of 0.0001 is used
+\end_layout
+
+\begin_layout Itemize
+Number of epochs – a final value of 15 epochs is used
+\end_layout
+
+\begin_layout Itemize
+Number of convolutional layers – 2 convolutional layers are used in both
+ GAT and GCN
+\end_layout
+
+\begin_layout Itemize
+Number of dense layers – 2 dense layers are used in GCN and 1 dense layer
+ is used in GAT
+\end_layout
+
+\begin_layout Itemize
+Dropout – a value of 0.3 is used in both GAT and GCN
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+The above iterative approach was all done on a smaller dataset (approx 5.5M
+ edges and approx 500k nodes) as the large dataset had onerus training time
+ (~6 hours per model run).
+ Once the hyperparameters were tuned on the GAT with BCEWithLogitsLoss model,
+ a conda environment was created in ilab and the model was set to run via
+ slurm on the large dataset with the gpu's available on ilab.
+\end_layout
+
+\begin_layout Itemize
+The final results of the large model were similar to the results with the
+ small model with a balanced_accuracy of approximately 0.52.
+ Results for each iteration and the hyperparameters used are included in
+ the below table.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Deep Learning Results
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+These results are disappointing as the balanced_accuracy did not substantially
+ improve with the different iterations.
+ One reason could be that there not enough distinguishing features to accurately
+ predict accounts that are involved in money laundering.
+ In a real-life scenario, other information about the owner of the account
+ would be available and provide context of multiple accounts being owned
+ by the same person.
+ In this dataset, there is no information on individuals and their assets,
+ which makes the task more difficult 
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,423 @@
+#LyX file created by tex2lyx 2.3
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin /Users/npatel/Library/CloudStorage/Dropbox/Nish/Rutgers MSDS/3_2023F/Massive Data Storage/Project/Rutgers-CS543-Group4-AML/reportlatex/
+\textclass IEEEtran
+\options conference,lined,ruled
+\use_default_options false
+\begin_modules
+algorithm2e
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding iso8859-1
+\fontencoding default
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 10
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 0
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+
+\begin_inset VSpace 100baselineskip%
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Itemize
+To answer question 1, a literature review was conducted to identify the current trends in the space. Legacy rules-based analysis relied on the table data structure within relational databases and pre-defined thresholds for identifying potential fraudulent transactions. Transactions over ten thousand dollars must be reported to the IRS. The key component that was missing from these systems was the ability to easily view the context of the transactions and the accounts that money is being transferred from or to. As graph analytics
+\begin_inset CommandInset citation
+LatexCommand cite
+after ""
+key "GraphAnalytics"
+literal "false"
+
+\end_inset
+
+ have evolved due to the rise of social networks, the financial industry has also embraced graphs to model financial transactions as a series of relationships to provide the missing context. Based on the literature review, we decided to utilize the graph data structure to model our data. Given the need to store, query, and visualize graph data, the data was converted 
+\begin_inset CommandInset citation
+LatexCommand cite
+after ""
+key "Neo4j"
+literal "false"
+
+\end_inset
+
+into nodes and edges via a Python script and imported into a graph database (Neo4j) that can natively handle the relationships and provide an efficient query mechanism.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+\align center
+
+\begin_inset Graphics 
+	filename imgs/neo4j.png
+	width 8cm
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Neo4j Database
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To answer question 2, the main issue to address was the screen bottleneck. With massive graph networks, the analyst can not visualize or analyze the graph using a traditional visualization. Despite this, analysts will need to perform an ad-hoc review of accounts to identify potential accounts of interest. Visualizing the data with a graph city solves this problem by allowing analysts to see the entire graph and perform analysis one building at a time. We used the graph city architecture introduced by James Abello, H. Zhang, Daniel Nakhimovich, Chengguizi Han, and Mridul Aanjaneya.
+\begin_inset CommandInset citation
+LatexCommand cite
+after ""
+key "Abello2022GigaGC"
+literal "false"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+after ""
+key "Abello2021GraphCT"
+literal "false"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+after ""
+key "Abello2020GraphW"
+literal "false"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+after ""
+key "Abello2013FixedPO"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset Float figure
+placement htp
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename imgs/graph_city.png
+	width 7cm
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Graph City Buildings
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:DataFlowDiagram"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+\align center
+
+\begin_inset Graphics 
+	filename imgs/graph_node.png
+	width 7cm
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Graph Nodes
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+To answer question 3, we needed to figure out how to leverage Neo4j's advanced capabilities to allow analysts to view transactions for particular accounts and their related accounts. This was done by creating a search application that allows the user to filter on certain key attributes and visualize a graph of an account (or series of accounts).
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+\align center
+
+\begin_inset Graphics 
+	filename imgs/searchapp.png
+	width 8cm
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Search Application
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once the query is submitted, a graph visualization is rendered that shows all transactions by that account and also any transaction by accounts that the account sent money to (depth 2).
+\begin_inset CommandInset citation
+LatexCommand cite
+after ""
+key "Neovis"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+\align center
+
+\begin_inset Graphics 
+	filename imgs/queryresult.png
+	width 8cm
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Query Result
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+An interesting finding is that communities of interest are readily apparent when visualizing the accounts through the search application.
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

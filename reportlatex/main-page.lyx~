@@ -1,0 +1,867 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass IEEEtran
+\begin_preamble
+
+
+\ifCLASSINFOpdf
+	\usepackage[pdftex]{graphicx}
+%\graphicspath{{./figs/}}
+	\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+	\usepackage[dvips]{graphicx}
+%\graphicspath{{./figs/}}
+	\DeclareGraphicsExtensions{.eps}
+\fi
+
+\usepackage[tight,footnotesize]{subfigure}
+\usepackage{xcolor}
+
+
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{arrows}
+
+\raggedbottom
+
+\newtheorem{property}{Property}\newtheorem{proposition}{Proposition}\newtheorem{theorem}{Theorem}\newtheorem{conjecture}{Conjecture}\newtheorem{question}{Question}\newtheorem{definition}{Definition}\newtheorem{corollary}{Corollary}
+
+
+\pgfdeclareshape{datastore}{
+\inheritsavedanchors[from=rectangle]
+\inheritanchorborder[from=rectangle]
+\inheritanchor[from=rectangle]{center}
+\inheritanchor[from=rectangle]{base}
+\inheritanchor[from=rectangle]{north}
+\inheritanchor[from=rectangle]{north east}
+\inheritanchor[from=rectangle]{east}
+\inheritanchor[from=rectangle]{south east}
+\inheritanchor[from=rectangle]{south}
+\inheritanchor[from=rectangle]{south west}
+\inheritanchor[from=rectangle]{west}
+\inheritanchor[from=rectangle]{north west}
+\backgroundpath{
+    %  store lower right in xa/ya and upper right in xb/yb
+\southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+\northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+\pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@ya}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}
+\pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@yb}}
+\pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yb}}
+ }
+}
+
+
+\newcommand{\riham}[1]{{\color{red}{#1}}}
+\newcommand{\james}[1]{{\color{blue}{#1}}}
+\end_preamble
+\options conference,lined,ruled
+\use_default_options false
+\begin_modules
+algorithm2e
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding iso8859-1
+\fontencoding default
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 10
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 2
+\use_package amssymb 0
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Anti-Money Laundering Visualization
+\end_layout
+
+\begin_layout Author
+ 
+\begin_inset Flex Author Name
+status collapsed
+
+\begin_layout Plain Layout
+Debopriyo Ghosh
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Author Affiliation
+status collapsed
+
+\begin_layout Plain Layout
+Rutgers University
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+email
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+dg1114@scarletmail.rutgers.edu
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+and
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Author Name
+status collapsed
+
+\begin_layout Plain Layout
+Nish Patel
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Author Affiliation
+status collapsed
+
+\begin_layout Plain Layout
+Rutgers University
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+email
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+nsp124@scarletmail.rutgers.edu
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+and
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Author Name
+status collapsed
+
+\begin_layout Plain Layout
+Jahnavi Manchala
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Flex Author Affiliation
+status collapsed
+
+\begin_layout Plain Layout
+Rutgers University
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+email
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\end_inset
+
+jm2658@scarletmail.rutgers.edu
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Abstract
+With massive graph networks, the analyst can not visualize or analyze the
+ graph using a traditional visualization.
+ Despite this, analysts will need to perform an ad-hoc review of accounts
+ to identify potential accounts of interest.
+ Visualizing the data with a graph city solves this problem by allowing
+ analysts to see the entire graph and perform analysis one building at a
+ time.
+ We used the graph city architecture introduced by James Abello, H.
+ Zhang, Daniel Nakhimovich, Chengguizi Han, and Mridul Aanjaneya.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Abello2022GigaGC"
+literal "false"
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+providecommand{
+\backslash
+keywords}[1]{
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+small	
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+textbf{
+\backslash
+textit{Keywords---}} #1
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+keywords{
+\end_layout
+
+\end_inset
+
+Money Laundering Detection, Graph Cities, Data Visualization, Synthetic
+ Laundering Transactions, Neo4j, Neovis, PySpark, Monitoring Transactions
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%
+\backslash
+onecolumn 
+\backslash
+maketitle 
+\backslash
+normalsize 
+\backslash
+vfill
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Peer Review Title
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:1. Introduction"
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+setlength{
+\backslash
+parindent}{2em}
+\end_layout
+
+\end_inset
+
+Money laundering detection is a critical issue in the financial sector,
+ where the stakes are exceptionally high due to the potential for large-scale
+ financial crimes.
+ Real financial transaction data, which is pivotal in identifying and combating
+ such illicit activities, is highly confidential and difficult to obtain
+ for privacy reasons.
+ This confidentiality is necessary to protect the personal and financial
+ information of individuals and institutions but simultaneously poses a
+ significant challenge for regulatory bodies and financial institutions
+ striving to detect and prevent money laundering.
+ As a result, developing effective detection systems often relies on sophisticat
+ed techniques that can work with limited or synthesized data, while still
+ accurately identifying suspicious activities without violating privacy
+ norms and regulations.
+ IBM has developed a simulation model to generate synthetic transactions.
+ The simulation includes simulated money laundering and these transactions
+ are labeled in the dataset.
+ 
+\end_layout
+
+\begin_layout Standard
+ Our project aims to provide analysts with a visualization tool to perform
+ an ad-hoc analysis of financial transaction data to identify possible accounts
+ of interest.
+ Once the accounts of interest are found, we aim to help the analyst review
+ financial transactions conducted by the accounts and their related accounts.
+ 
+\end_layout
+
+\begin_layout Section
+Dataset Description 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:1 Dataset Description. "
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%%%%%%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand input
+filename "dataset.lyx"
+
+\end_inset
+
+ 
+\begin_inset VSpace 100baselineskip%
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Questions to Answer
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec: Questions to Answer."
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand input
+filename "Questions.lyx"
+
+\end_inset
+
+ 
+\begin_inset VSpace 100baselineskip%
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Methodology
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec: Methodology"
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand input
+filename "Methodology.lyx"
+
+\end_inset
+
+ 
+\begin_inset VSpace 100baselineskip%
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Implementation 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec: Implementation"
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand input
+filename "Implementation.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Architecture 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec: Architecture."
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand input
+filename "architecture.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Project Timeline
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:5. Project Timeline"
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand input
+filename "timeline.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Deep Learning
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec: Deep Learning"
+
+\end_inset
+
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand input
+filename "DeepLearning.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Future work.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec: Future work"
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset include
+LatexCommand input
+filename "FutureWork.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+ 
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "paper.bib"
+options "IEEEtran"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

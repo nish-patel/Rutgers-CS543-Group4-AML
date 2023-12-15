@@ -15,3 +15,11 @@ you can start neo4j with ./bin/neo4j console
 modified graph city code is also included and will link the graph city to the visualization application
 
 once neo4j and graph cities are both running, search.html can be run either via a node server or locally via a web browser.
+
+
+note: the following files are too large for github
+
+	- HI-Large_Trans.csv and HI-Small_Trans.csv can be downloaded here: https://www.kaggle.com/datasets/ealtman2019/ibm-transactions-for-anti-money-laundering-aml
+	- clean_data.csv and clean_data_small.csv need to be generated via data_preprocessing.ipynb
+	- aml.txt needs to be generated via create_csvs_for_neo4j_import.py for use in graph city
+	- edges.csv needs to be generated via NN Project 2/create_features_gcn.py (clean_data.csv is an input to this script so that needs to be generated first)
